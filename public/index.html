@@ -1,0 +1,99 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>ウチのペットLINEスタンプメーカー</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@500;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <header class="top">
+    <h1>🐾 ウチのペット<br class="sp" />LINEスタンプメーカー</h1>
+    <ol class="steps">
+      <li data-step="1" class="active">① 写真と名前</li>
+      <li data-step="2">② キャラシート</li>
+      <li data-step="3">③ スタンプ</li>
+    </ol>
+  </header>
+
+  <main>
+    <!-- STEP 1 -->
+    <section id="step1" class="panel">
+      <h2>写真をえらぶ（1〜3枚）</h2>
+      <label class="drop" id="drop">
+        <input type="file" id="files" accept="image/*" multiple hidden />
+        <span>📷 タップして写真をえらぶ<br /><small>またはここにドラッグ</small></span>
+      </label>
+      <div class="thumbs" id="thumbs"></div>
+
+      <h2>名前</h2>
+      <input type="text" id="petName" maxlength="20" placeholder="例：ポチ" />
+
+      <button class="primary" id="btnGenerate" disabled>✨ キャラクターを生成</button>
+      <p class="hint" id="keyHint" hidden>
+        ⚠️ サーバーに ANTHROPIC_API_KEY が設定されていません。<br />
+        <button class="link" id="btnDemo">APIなしでお試し（ランダム生成）</button>
+      </p>
+    </section>
+
+    <!-- STEP 2 -->
+    <section id="step2" class="panel" hidden>
+      <h2>キャラクターシート</h2>
+      <p class="reason" id="reason"></p>
+      <div class="sheet-wrap"><canvas id="sheet"></canvas></div>
+
+      <div class="tweak">
+        <label>顔テンプレートを手動で変える
+          <select id="templateSelect"></select>
+        </label>
+        <button class="ghost" id="btnSaveSheet">シートを画像で保存</button>
+      </div>
+
+      <div class="regen">
+        <h3>イメージと違う？ AIに修正をお願いする</h3>
+        <div class="chips" id="chips">
+          <button data-text="顔のテンプレートを変えてほしい">顔が違う方が良い</button>
+          <button data-text="もう少し写真の特徴を捉えてほしい">もう少し特徴を捉えて</button>
+          <button data-text="色を写真の毛色に近づけてほしい">色を写真に近づけて</button>
+          <button data-text="模様や小物を減らして、もっとシンプルにしてほしい">もっとシンプルに</button>
+          <button data-text="もっと明るくかわいい色にしてほしい">明るい色に</button>
+        </div>
+        <textarea id="instruction" rows="2" placeholder="例：耳はもっと垂れてる感じ／首輪は赤"></textarea>
+        <button class="secondary" id="btnRegen">🔄 この指示で再生成</button>
+      </div>
+
+      <div class="actions">
+        <button class="ghost" id="back1">← 写真をえらび直す</button>
+        <button class="primary" id="btnStamps">👍 このシートでOK！スタンプを作る</button>
+      </div>
+    </section>
+
+    <!-- STEP 3 -->
+    <section id="step3" class="panel" hidden>
+      <h2>スタンプ（8種類）</h2>
+      <p class="hint">文字はタップして書き換えできます。背景は透過PNGです。</p>
+      <div class="stamps" id="stamps"></div>
+      <div class="extras">
+        <figure><canvas id="mainImg"></canvas><figcaption>メイン画像 240×240</figcaption></figure>
+        <figure><canvas id="tabImg"></canvas><figcaption>タブ画像 96×74</figcaption></figure>
+      </div>
+      <div class="actions">
+        <button class="ghost" id="back2">← シートに戻る</button>
+        <button class="primary" id="btnZip">⬇️ まとめてダウンロード（ZIP）</button>
+      </div>
+    </section>
+  </main>
+
+  <div class="loading" id="loading" hidden>
+    <div class="spinner"></div>
+    <p id="loadingText">生成中…</p>
+  </div>
+  <div class="toast" id="toast" hidden></div>
+
+  <script src="/vendor/jszip.min.js"></script>
+  <script type="module" src="app.js"></script>
+</body>
+</html>
